@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Play 게임즈 서비스 앱 ID(숫자만). Play Console → Play 게임즈 서비스 → 구성에서
+         발급되는 "프로젝트 ID(숫자)"로 교체해야 리더보드가 작동한다.
+         교체 전(placeholder)에는 리더보드 로그인이 실패하지만 앱은 정상 동작한다. -->
+    <string name="games_app_id" translatable="false">000000000000</string>
+</resources>

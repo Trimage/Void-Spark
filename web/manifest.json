@@ -1,0 +1,35 @@
+{
+    "name": "VOID SPARK",
+    "short_name": "VOID SPARK",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#05060E",
+    "theme_color": "#21E6FF",
+    "description": "네온 벡터 탄막 회피 슈팅 아케이드 — 빛이 꺼질 때까지 살아남아라.",
+    "orientation": "portrait-primary",
+    "prefer_related_applications": false,
+    "icons": [
+        {
+            "src": "icons/Icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/Icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/Icon-maskable-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "icons/Icon-maskable-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ]
+}
