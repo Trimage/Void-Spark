@@ -58,8 +58,9 @@ class Turret extends Enemy {
       Palette.corrupt,
       glow: Palette.corruptGlow,
       rotation: _spin,
+      blur: false,
     );
     Neon.circle(canvas, c, radius * 0.35, Palette.corruptGlow,
-        glow: Palette.corruptGlow, glowScale: 1.6);
+        glow: Palette.corruptGlow, glowScale: 1.6, blur: false);
   }
 }

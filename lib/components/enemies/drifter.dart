@@ -43,6 +43,7 @@ class Drifter extends Enemy {
       Palette.corrupt,
       glow: Palette.corruptGlow,
       rotation: _spin,
+      blur: false,
     );
   }
 }

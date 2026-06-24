@@ -109,7 +109,7 @@ class Core extends PositionComponent
     }
     Enemy? nearest;
     double best = double.infinity;
-    for (final e in game.children.whereType<Enemy>()) {
+    for (final e in game.activeEnemies) {
       final d = e.position.distanceToSquared(position);
       if (d < best) {
         best = d;

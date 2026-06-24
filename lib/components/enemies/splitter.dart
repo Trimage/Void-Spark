@@ -53,6 +53,7 @@ class Splitter extends Enemy {
       glow: Palette.corruptGlow,
       rotation: _spin,
       strokeWidth: 3.5,
+      blur: false,
     );
   }
 }
@@ -90,6 +91,7 @@ class SplitterChild extends Enemy {
       3,
       Palette.corrupt,
       glow: Palette.corruptGlow,
+      blur: false,
     );
   }
 }

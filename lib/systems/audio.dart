@@ -15,7 +15,11 @@ class AudioSystem {
 
   bool _ready = false;
   bool _bgmPlaying = false;
+  // 자주 나는 효과음은 풀로 플레이어를 재사용한다(매번 새 네이티브 플레이어
+  // 생성 시 모바일 오디오 스택이 포화돼 프레임이 멈추는 것을 방지).
   AudioPool? _shootPool;
+  AudioPool? _killPool;
+  AudioPool? _collectPool;
 
   // 사운드별 마지막 재생 시각(ms) — 쓰로틀용.
   final Map<String, int> _lastMs = {};
@@ -37,6 +41,8 @@ class AudioSystem {
     try {
       await FlameAudio.audioCache.loadAll(_files);
       _shootPool = await FlameAudio.createPool('shoot.wav', maxPlayers: 4);
+      _killPool = await FlameAudio.createPool('kill.wav', maxPlayers: 4);
+      _collectPool = await FlameAudio.createPool('collect.wav', maxPlayers: 4);
       _ready = true;
     } catch (e) {
       debugPrint('AudioSystem preload skipped: $e');
@@ -71,10 +77,19 @@ class AudioSystem {
     } catch (_) {}
   }
 
-  void kill() => _play('kill.wav', 0.5, 45);
-  void collect() => _play('collect.wav', 0.4, 45);
+  /// 풀에서 플레이어를 재사용해 재생(네이티브 플레이어 생성 churn 제거).
+  void _playPooled(AudioPool? pool, String key, double volume, int minGapMs) {
+    if (!enabled || !_ready || pool == null) return;
+    if (!_allow(key, minGapMs)) return;
+    try {
+      pool.start(volume: volume * sfxVolume);
+    } catch (_) {}
+  }
+
+  void kill() => _playPooled(_killPool, 'kill', 0.5, 45);
+  void collect() => _playPooled(_collectPool, 'collect', 0.4, 45);
   void hit() => _play('hit.wav', 0.8, 0);
-  void powerup() => _play('powerup.wav', 0.7, 0);
+  void powerup() => _play('powerup.wav', 0.7, 60);
   void gameOver() => _play('gameover.wav', 0.9, 0);
   void boss() => _play('boss.wav', 0.9, 0);
   void bomb() => _play('bomb.wav', 0.8, 0);

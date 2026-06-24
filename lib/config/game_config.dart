@@ -277,8 +277,8 @@ class GameConfig {
 
   /// 1레벨업에 필요한 기본 XP와 레벨마다의 증가 배율.
   /// (간격을 넉넉하게 — 초반도 너무 자주 레벨업하지 않도록)
-  static const int xpBase = 30;
-  static const double xpGrowth = 1.5;
+  static const int xpBase = 55;
+  static const double xpGrowth = 1.7;
 
   // ---- 메타 진행 ----
   /// 파편(Shard) 환산: 점수 ÷ 이 값 = 획득 파편. (낮을수록 더 많이 획득)

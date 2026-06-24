@@ -47,8 +47,11 @@ class ScoreOrb extends PositionComponent with HasGameReference<VoidSparkGame> {
       return;
     }
 
-    final toCore = game.core.position - position;
-    final dist = toCore.length;
+    // 매 프레임 Vector2 할당을 피하려 스칼라(dx/dy)로 직접 계산.
+    final core = game.core.position;
+    final dx = core.x - position.x;
+    final dy = core.y - position.y;
+    final dist = math.sqrt(dx * dx + dy * dy);
 
     // 코어 획득 판정.
     const pickR = GameConfig.coreRadius + GameConfig.orbRadius;
@@ -59,14 +62,17 @@ class ScoreOrb extends PositionComponent with HasGameReference<VoidSparkGame> {
     }
 
     if (dist > 0.01) {
-      final dir = toCore / dist;
+      final inv = 1 / dist; // 정규화 방향(dx*inv, dy*inv)
       final assistR = game.orbAssistRadius; // 자력 업그레이드 반영
       if (game.powerups.magnetActive) {
-        position += dir * GameConfig.orbMagnetSpeed * dt;
+        final s = GameConfig.orbMagnetSpeed * dt;
+        position.x += dx * inv * s;
+        position.y += dy * inv * s;
       } else if (dist < assistR) {
         // 가까울수록 강해지는 보조 흡입.
-        final pull = (1 - dist / assistR);
-        position += dir * GameConfig.orbAssistSpeed * pull * dt;
+        final s = GameConfig.orbAssistSpeed * (1 - dist / assistR) * dt;
+        position.x += dx * inv * s;
+        position.y += dy * inv * s;
       }
     }
   }

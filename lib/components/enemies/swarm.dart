@@ -35,6 +35,7 @@ class Swarm extends Enemy {
       Palette.corrupt,
       glow: Palette.corruptGlow,
       glowScale: 2.0,
+      blur: false,
     );
   }
 }

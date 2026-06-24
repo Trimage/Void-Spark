@@ -1,6 +1,8 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
+import 'neon.dart';
+
 /// 단순 발광 파티클 — 한 점에서 방사형으로 흩어지며 사라진다.
 ///
 /// 성능: 폭발마다 대량 생성되므로 **오브젝트 풀**로 재사용한다.
@@ -44,9 +46,9 @@ class NeonParticle extends PositionComponent {
     if (!active) return;
     final t = (1 - _age / life).clamp(0.0, 1.0);
     final r = 3.0 * t + 0.5;
-    _p.color = color.withValues(alpha: t * 0.35);
+    _p.color = Neon.alpha(color, t * 0.35);
     canvas.drawCircle(Offset.zero, r * 2.2, _p);
-    _p.color = color.withValues(alpha: t);
+    _p.color = Neon.alpha(color, t);
     canvas.drawCircle(Offset.zero, r, _p);
   }
 }

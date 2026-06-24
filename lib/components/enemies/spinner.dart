@@ -63,6 +63,7 @@ class Spinner extends Enemy {
       Palette.corrupt,
       glow: Palette.corruptGlow,
       rotation: _angle,
+      blur: false,
     );
   }
 }
