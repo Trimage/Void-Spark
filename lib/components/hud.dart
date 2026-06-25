@@ -61,15 +61,16 @@ class Hud extends PositionComponent with HasGameReference<VoidSparkGame> {
 
   @override
   void update(double dt) {
+    final inset = game.topInset;
     _score.text = '${game.score}';
-    _score.position = Vector2(game.size.x / 2, 40);
+    _score.position = Vector2(game.size.x / 2, 40 + inset);
     _wave.text = 'SECTOR ${game.sector} · WAVE ${game.waves.waveNumber}';
-    _wave.position = Vector2(game.size.x / 2, 80);
+    _wave.position = Vector2(game.size.x / 2, 80 + inset);
 
     // 콤보 배율(1.0 초과일 때만 표시).
     final mult = game.combo.multiplier;
     _combo.text = mult > 1.0 ? '×${mult.toStringAsFixed(1)}' : '';
-    _combo.position = Vector2(game.size.x / 2, 100);
+    _combo.position = Vector2(game.size.x / 2, 100 + inset);
   }
 
   @override
@@ -78,7 +79,7 @@ class Hud extends PositionComponent with HasGameReference<VoidSparkGame> {
     final w = game.size.x;
     final t = game.intensity.value;
     const margin = 24.0;
-    const top = 18.0;
+    final top = 18.0 + game.topInset;
     final barW = w - margin * 2;
     const barH = 4.0;
 
@@ -110,7 +111,7 @@ class Hud extends PositionComponent with HasGameReference<VoidSparkGame> {
   /// 상단 Intensity 바 아래 얇은 레벨 XP 바 + LV 라벨.
   void _renderLevelBar(Canvas canvas, double w) {
     const margin = 24.0;
-    const top = 26.0;
+    final top = 26.0 + game.topInset;
     final barW = w - margin * 2;
     const barH = 3.0;
     final p = game.xpProgress;
@@ -255,7 +256,7 @@ class Hud extends PositionComponent with HasGameReference<VoidSparkGame> {
     const size = 26.0;
     const gap = 8.0;
     var x = w - 24 - size;
-    const y = 36.0;
+    final y = 36.0 + game.topInset;
     for (final (glyph, color, ratio) in chips) {
       final rect = Rect.fromLTWH(x, y, size, size);
       final rr = RRect.fromRectAndRadius(rect, const Radius.circular(7));

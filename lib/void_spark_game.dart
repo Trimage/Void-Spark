@@ -148,6 +148,10 @@ class VoidSparkGame extends FlameGame
   /// 프레임마다 갱신되는 활성 적 목록(플레이어 총알 명중 판정용).
   final List<Enemy> activeEnemies = [];
 
+  /// 상단 안전영역 인셋(노치·다이나믹 아일랜드). GameScreen이 MediaQuery로 주입.
+  /// HUD가 이 값만큼 상단 요소를 내려 가려지지 않게 한다.
+  double topInset = 0;
+
   double _invuln = 0;
   bool get invulnerable => _invuln > 0;
 
