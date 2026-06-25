@@ -3,6 +3,11 @@
 class GameConfig {
   GameConfig._();
 
+  // ---- 기능 플래그 ----
+  /// 인앱결제(IAP) 사용 여부. false면 상점 STORE 섹션·프리미엄 스킨을 숨기고
+  /// 결제 초기화를 건너뛴다(광고는 별개로 유지). 첫 출시는 false로 IAP 없이 시작.
+  static const bool iapEnabled = false;
+
   // ---- 코어(플레이어) ----
   /// 코어 반지름(논리 px).
   static const double coreRadius = 14.0;

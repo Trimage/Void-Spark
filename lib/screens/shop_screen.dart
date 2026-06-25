@@ -29,7 +29,7 @@ class _ShopScreenState extends State<ShopScreen> {
   void initState() {
     super.initState();
     // 결제 완료(비동기 스트림)가 반영되면 화면을 갱신.
-    if (iap.available) {
+    if (GameConfig.iapEnabled && iap.available) {
       _iapTick = Timer.periodic(const Duration(milliseconds: 600), (_) {
         if (iap.changeTick != _lastTick) {
           _lastTick = iap.changeTick;
@@ -146,7 +146,9 @@ class _ShopScreenState extends State<ShopScreen> {
             childAspectRatio: 1.15,
             children: [
               for (var i = 0; i < Skins.all.length; i++)
-                _skinCard(i, Skins.all[i]),
+                // IAP 비활성 시 프리미엄(결제 전용) 스킨은 숨긴다.
+                if (GameConfig.iapEnabled || !Skins.all[i].premium)
+                  _skinCard(i, Skins.all[i]),
             ],
           ),
           const SizedBox(height: 28),
@@ -164,7 +166,7 @@ class _ShopScreenState extends State<ShopScreen> {
           _startBombCard(),
           const SizedBox(height: 10),
           _startComboCard(),
-          if (iap.available) ...[
+          if (GameConfig.iapEnabled && iap.available) ...[
             const SizedBox(height: 28),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

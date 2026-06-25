@@ -2,6 +2,7 @@ import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'config/game_config.dart';
 import 'config/palette.dart';
 import 'screens/menu_screen.dart';
 import 'systems/iap/iap.dart';
@@ -22,7 +23,10 @@ Future<void> main() async {
   await SaveSystem.instance.load();
 
   // 인앱결제 초기화(구매 스트림 구독 + 권한 복원). 웹/미지원은 무동작.
-  await iap.init();
+  // 첫 출시는 IAP 비활성(GameConfig.iapEnabled=false) — 초기화 건너뜀.
+  if (GameConfig.iapEnabled) {
+    await iap.init();
+  }
 
   // 글로벌 리더보드 로그인 시도(웹/미지원은 무동작).
   await leaderboard.init();
