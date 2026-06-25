@@ -191,7 +191,7 @@ class GameConfig {
   static const double bgPulsePeriod = 3.2;
 
   /// 적 처치 파티클 수.
-  static const int killParticles = 10;
+  static const int killParticles = 7;
 
   // ---- 성능 상한(동시 존재 가능한 최대 수) ----
   /// 화면에 동시에 존재 가능한 적 탄막 수(초과 시 신규 발사 무시).
@@ -201,7 +201,7 @@ class GameConfig {
   static const int maxEnemies = 48;
 
   /// 동시에 존재 가능한 파티클 수(초과분은 생성하지 않음).
-  static const int maxParticles = 160;
+  static const int maxParticles = 110;
 
   /// 동시에 존재 가능한 점수 오브 수(초과 시 가장 오래된 것부터 정리).
   static const int maxOrbs = 45;

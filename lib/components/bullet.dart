@@ -4,7 +4,6 @@ import 'package:flame/components.dart';
 
 import '../config/game_config.dart';
 import '../void_spark_game.dart';
-import 'neon.dart';
 
 /// 플레이어가 발사하는 총알.
 ///
@@ -58,19 +57,8 @@ class Bullet extends PositionComponent with HasGameReference<VoidSparkGame> {
     }
   }
 
+  // 렌더는 BatchLayer가 일괄 처리. renderTree 자체를 건너뛰어 컴포넌트별
+  // save/transform/restore 비용까지 제거한다(고부하 구간 프레임 비용↓).
   @override
-  void render(Canvas canvas) {
-    if (!active) return;
-    final c = Offset(size.x / 2, size.y / 2);
-    final skin = game.skin;
-    Neon.circle(
-      canvas,
-      c,
-      GameConfig.bulletRadius,
-      skin.color,
-      glow: skin.glow,
-      glowScale: 2.6,
-      blur: false,
-    );
-  }
+  void renderTree(Canvas canvas) {}
 }

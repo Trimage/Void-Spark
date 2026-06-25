@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flame/components.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../config/game_config.dart';
 import '../../config/palette.dart';
@@ -31,6 +32,17 @@ class Boss extends Enemy {
 
   /// 체력 비율(0~1).
   double get hpRatio => hp / maxHp;
+
+  /// 자리 잡기(하강 완료) 전까지는 무적 — 체력이 닳지 않는다.
+  @override
+  void takeDamage(int amount) {
+    if (!_entered) return;
+    super.takeDamage(amount);
+  }
+
+  /// 테스트용: 등장 완료 상태로 강제 전환.
+  @visibleForTesting
+  void debugMarkEntered() => _entered = true;
 
   int _phaseFor(double ratio) {
     if (ratio > 0.66) return 1;
@@ -194,5 +206,15 @@ class Boss extends Enemy {
         glow: glow, rotation: -_spin * 1.4, strokeWidth: 3);
     Neon.circle(canvas, c, radius * 0.28, Palette.danger,
         glow: Palette.danger, glowScale: 2.0);
+
+    // 등장(자리 잡기) 전엔 무적 표시용 실드 링.
+    if (!_entered) {
+      Neon.circle(canvas, c, radius * 1.18, Palette.core,
+          glow: Palette.coreGlow,
+          filled: false,
+          strokeWidth: 3,
+          glowScale: 1.4,
+          blur: false);
+    }
   }
 }

@@ -4,6 +4,7 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/painting.dart';
 
+import 'components/batch_layer.dart';
 import 'components/bullet.dart';
 import 'components/core.dart';
 import 'components/core_trail.dart';
@@ -139,6 +140,11 @@ class VoidSparkGame extends FlameGame
   late final List<NeonParticle> _pPool;
   late final List<ScoreOrb> _orbPool;
 
+  // 배치 렌더러(BatchLayer)가 일괄로 그리도록 풀을 공개.
+  List<EnemyBullet> get ebPool => _ebPool;
+  List<Bullet> get pbPool => _pbPool;
+  List<ScoreOrb> get orbPool => _orbPool;
+
   /// 프레임마다 갱신되는 활성 적 목록(플레이어 총알 명중 판정용).
   final List<Enemy> activeEnemies = [];
 
@@ -208,6 +214,9 @@ class VoidSparkGame extends FlameGame
     await addAll(_pbPool);
     await addAll(_pPool);
     await addAll(_orbPool);
+    // 적탄·플레이어탄·오브를 일괄 렌더(개별 컴포넌트 변환 오버헤드 제거).
+    // priority 5 → 적(6) 아래, 배경 위.
+    await add(BatchLayer(priority: 5));
 
     _applyStartBonus();
     _applySettings();

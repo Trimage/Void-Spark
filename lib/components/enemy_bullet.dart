@@ -3,9 +3,7 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 
 import '../config/game_config.dart';
-import '../config/palette.dart';
 import '../void_spark_game.dart';
-import 'neon.dart';
 
 /// 적이 발사하는 탄. 코어에만 충돌(거리 검사)한다.
 ///
@@ -65,18 +63,8 @@ class EnemyBullet extends PositionComponent with HasGameReference<VoidSparkGame>
     }
   }
 
+  // 렌더는 BatchLayer가 일괄 처리. renderTree 자체를 건너뛰어 컴포넌트별
+  // save/transform/restore 비용까지 제거한다(고부하 구간 프레임 비용↓).
   @override
-  void render(Canvas canvas) {
-    if (!active) return;
-    final c = Offset(size.x / 2, size.y / 2);
-    Neon.circle(
-      canvas,
-      c,
-      GameConfig.enemyBulletRadius,
-      Palette.corrupt,
-      glow: Palette.corruptGlow,
-      glowScale: 2.2,
-      blur: false,
-    );
-  }
+  void renderTree(Canvas canvas) {}
 }

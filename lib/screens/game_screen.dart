@@ -36,31 +36,36 @@ class _GameScreenState extends State<GameScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF05060E),
-      body: GameWidget<VoidSparkGame>(
-        game: _game,
-        initialActiveOverlays: _initialOverlays,
-        overlayBuilderMap: {
-          VoidSparkGame.controlsOverlay: (context, game) =>
-              ControlsOverlay(game: game),
-          VoidSparkGame.tutorialOverlay: (context, game) =>
-              TutorialOverlay(game: game),
-          VoidSparkGame.pauseOverlay: (context, game) => PauseOverlay(
-                game: game,
-                onMenu: () => Navigator.of(context).pop(),
-              ),
-          VoidSparkGame.victoryOverlay: (context, game) => VictoryOverlay(
-                game: game,
-                onMenu: () => Navigator.of(context).pop(),
-              ),
-          VoidSparkGame.levelUpOverlay: (context, game) =>
-              LevelUpOverlay(game: game),
-          VoidSparkGame.gameOverOverlay: (context, game) => GameOverOverlay(
-                game: game,
-                onMenu: () => Navigator.of(context).pop(),
-              ),
-        },
+    // canPop:false → iOS 가장자리 스와이프·시스템 뒤로가기를 막는다(게임 조작과
+    // 충돌 방지). 메뉴로 나가는 건 일시정지/게임오버 오버레이의 명시적 pop으로만.
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        backgroundColor: const Color(0xFF05060E),
+        body: GameWidget<VoidSparkGame>(
+          game: _game,
+          initialActiveOverlays: _initialOverlays,
+          overlayBuilderMap: {
+            VoidSparkGame.controlsOverlay: (context, game) =>
+                ControlsOverlay(game: game),
+            VoidSparkGame.tutorialOverlay: (context, game) =>
+                TutorialOverlay(game: game),
+            VoidSparkGame.pauseOverlay: (context, game) => PauseOverlay(
+                  game: game,
+                  onMenu: () => Navigator.of(context).pop(),
+                ),
+            VoidSparkGame.victoryOverlay: (context, game) => VictoryOverlay(
+                  game: game,
+                  onMenu: () => Navigator.of(context).pop(),
+                ),
+            VoidSparkGame.levelUpOverlay: (context, game) =>
+                LevelUpOverlay(game: game),
+            VoidSparkGame.gameOverOverlay: (context, game) => GameOverOverlay(
+                  game: game,
+                  onMenu: () => Navigator.of(context).pop(),
+                ),
+          },
+        ),
       ),
     );
   }

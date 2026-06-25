@@ -131,9 +131,14 @@ void main() {
     expect(w.current.kinds.length, greaterThan(1));
   });
 
-  test('boss hp ratio decreases with damage', () {
+  test('boss is invincible until entered, then takes damage', () {
     final b = Boss(position: Vector2.zero());
     expect(b.hpRatio, 1.0);
+    // 등장(자리 잡기) 전에는 무적 — 데미지 무시.
+    b.takeDamage(GameConfig.bossHp ~/ 2);
+    expect(b.hpRatio, 1.0);
+    // 자리 잡은 뒤에는 체력이 닳는다.
+    b.debugMarkEntered();
     b.takeDamage(GameConfig.bossHp ~/ 2);
     expect(b.hpRatio, closeTo(0.5, 0.05));
   });

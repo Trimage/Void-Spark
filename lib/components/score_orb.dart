@@ -4,9 +4,7 @@ import 'dart:ui';
 import 'package:flame/components.dart';
 
 import '../config/game_config.dart';
-import '../config/palette.dart';
 import '../void_spark_game.dart';
-import 'neon.dart';
 
 /// 점수 오브 — 적 처치 시 떨어진다. 코어가 닿아야 점수를 획득한다.
 /// (위험한 곳으로 움직이도록 유도하는 핵심 장치)
@@ -21,14 +19,12 @@ class ScoreOrb extends PositionComponent with HasGameReference<VoidSparkGame> {
   int value = GameConfig.scorePerKill;
   bool active = false;
   double life = 0; // 누적 수명(가득 찼을 때 가장 오래된 것 교체용)
-  double _pulse = 0;
 
   /// 풀에서 꺼내 재사용.
   void spawn(Vector2 pos, int v) {
     position.setFrom(pos);
     value = v;
     life = 0;
-    _pulse = 0;
     active = true;
   }
 
@@ -41,7 +37,6 @@ class ScoreOrb extends PositionComponent with HasGameReference<VoidSparkGame> {
   void update(double dt) {
     if (!active) return;
     life += dt;
-    _pulse += dt;
     if (life >= GameConfig.orbLifetime) {
       active = false;
       return;
@@ -77,19 +72,8 @@ class ScoreOrb extends PositionComponent with HasGameReference<VoidSparkGame> {
     }
   }
 
+  // 렌더는 BatchLayer가 일괄 처리. renderTree 자체를 건너뛰어 컴포넌트별
+  // save/transform/restore 비용까지 제거한다(고부하 구간 프레임 비용↓).
   @override
-  void render(Canvas canvas) {
-    if (!active) return;
-    final c = Offset(size.x / 2, size.y / 2);
-    final breathe = 1 + 0.18 * (0.5 + 0.5 * math.sin(_pulse * 6));
-    Neon.circle(
-      canvas,
-      c,
-      GameConfig.orbRadius * breathe,
-      Palette.scoreOrb,
-      glow: Palette.scoreOrbGlow,
-      glowScale: 2.4,
-      blur: false,
-    );
-  }
+  void renderTree(Canvas canvas) {}
 }
