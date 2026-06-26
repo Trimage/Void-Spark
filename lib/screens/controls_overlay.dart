@@ -43,16 +43,13 @@ class _ControlsOverlayState extends State<ControlsOverlay> {
     return SafeArea(
       child: Stack(
         children: [
-          // 일시정지(조작 버튼 반대편 상단, 플레이 중일 때만).
+          // 일시정지: 항상 좌상단, 강도/XP 바(상단 전체폭) 아래로 내려 겹침 방지.
+          // 우상단은 파워업 칩 영역이라 피한다.
           if (playing)
             Align(
-              alignment: right ? Alignment.topLeft : Alignment.topRight,
+              alignment: Alignment.topLeft,
               child: Padding(
-                padding: EdgeInsets.only(
-                  left: right ? 16 : 0,
-                  right: right ? 0 : 16,
-                  top: 4,
-                ),
+                padding: const EdgeInsets.only(left: 14, top: 48),
                 child: _RoundButton(
                   icon: Icons.pause,
                   color: Palette.textDim,
