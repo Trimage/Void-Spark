@@ -162,6 +162,8 @@ class VoidSparkGame extends FlameGame
   int _bossCount = 0;
 
   double _closeCallCd = 0;
+  // 처치 화면흔들림 쿨다운 — 고밀도 구간에서 흔들림이 끊임없이 리셋되는 것 방지.
+  double _killShakeCd = 0;
 
   // ---- 영구 업그레이드 / 난이도 적용값 ----
   double get effectiveFireInterval =>
@@ -307,6 +309,7 @@ class VoidSparkGame extends FlameGame
 
     if (_invuln > 0) _invuln -= scaled;
     if (_closeCallCd > 0) _closeCallCd -= dt;
+    if (_killShakeCd > 0) _killShakeCd -= dt;
     if (bossWarnTimer > 0) bossWarnTimer -= dt;
     if (state == GameState.playing) {
       runTime += dt;
@@ -430,8 +433,12 @@ class VoidSparkGame extends FlameGame
     }
     spawnBurst(enemy.position, Palette.corruptGlow);
     audio.kill();
-    juice.shake(GameConfig.shakeKill);
-    juice.hitStop(GameConfig.hitStopKill);
+    // 처치 흔들림은 쿨다운으로 제한(고밀도 구간에서 흔들림이 멈추지 않는 문제 방지).
+    // 처치당 히트스톱은 제거 — 빠른 연속 처치 시 월드가 계속 정지하던 원인.
+    if (_killShakeCd <= 0) {
+      juice.shake(GameConfig.shakeKill);
+      _killShakeCd = GameConfig.killShakeCooldown;
+    }
   }
 
   void _spawnOrb(Vector2 position) {
@@ -664,6 +671,7 @@ class VoidSparkGame extends FlameGame
     score = 0;
     _invuln = 0;
     _closeCallCd = 0;
+    _killShakeCd = 0;
     boss = null;
     bossActive = false;
     _nextBossWave = GameConfig.bossEveryWaves;

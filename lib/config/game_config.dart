@@ -234,7 +234,11 @@ class GameConfig {
   static const double shakeBig = 30.0;
   static const double shakeDuration = 0.35;
 
-  /// 히트스톱(미세 정지) 시간(초).
+  /// 처치 화면흔들림 최소 간격(초) — 고밀도 구간에서 흔들림이 끊임없이
+  /// 리셋돼 화면이 계속 떨리는 것을 방지(이 간격보다 자주 흔들지 않음).
+  static const double killShakeCooldown = 0.22;
+
+  /// 히트스톱(미세 정지) 시간(초). hitStopKill은 현재 미사용(처치당 정지 제거).
   static const double hitStopKill = 0.04;
   static const double hitStopHit = 0.12;
 
