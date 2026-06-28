@@ -157,7 +157,7 @@ class GameConfig {
 
   // ---- 파워업 ----
   /// 적 처치 시 파워업이 드롭될 확률.
-  static const double powerupDropChance = 0.10;
+  static const double powerupDropChance = 0.07;
 
   /// 파워업 픽업 반지름.
   static const double powerupRadius = 13.0;
@@ -212,10 +212,11 @@ class GameConfig {
   static const int maxOrbs = 45;
 
   /// 동시에 존재 가능한 플레이어 총알 수(확산·후방·연사 누적 폭증 방지).
-  static const int maxPlayerBullets = 140;
+  /// 난사 시 충돌·렌더 피크 부하를 줄이려 상한을 낮춤(110).
+  static const int maxPlayerBullets = 110;
 
   /// 한 번 발사 시 한쪽 추가 탄(쌍)의 상한(확산 무한 누적 방지).
-  static const int maxSidePairs = 6;
+  static const int maxSidePairs = 5;
 
   /// 한 프레임 dt 상한(초). 끊김 직후 거대한 dt가 들어와 적·탄이 순간이동하며
   /// 즉사하는 것을 막는다(~30fps 스텝으로 제한).
@@ -259,7 +260,7 @@ class GameConfig {
   static const int bossEveryWaves = 4;
 
   static const double bossRadius = 56.0;
-  static const int bossHp = 140;
+  static const int bossHp = 200;
   static const double bossSpeed = 70.0;
 
   /// 보스 진입 후 좌우 순항 시 화면 위쪽에 유지하는 y 위치.
