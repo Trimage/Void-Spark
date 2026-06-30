@@ -41,6 +41,25 @@ class MobileLeaderboardService implements LeaderboardService {
   }
 
   @override
+  Future<int?> playerGlobalRank(int difficulty) async {
+    if (!_signedIn) return null;
+    try {
+      final data = await Leaderboards.getPlayerScoreObject(
+        androidLeaderboardID: GameConfig.androidLeaderboardId(difficulty),
+        iOSLeaderboardID: GameConfig.iosLeaderboardId(difficulty),
+        scope: PlayerScope.global,
+        timeScope: TimeScope.allTime,
+      );
+      final rank = data?.rank;
+      // 순위는 1 이상이어야 유효(미등록/오류 시 0 이하가 올 수 있음).
+      return (rank != null && rank > 0) ? rank : null;
+    } catch (e) {
+      debugPrint('playerGlobalRank failed: $e');
+      return null;
+    }
+  }
+
+  @override
   Future<void> showGlobal(int difficulty) async {
     try {
       await GamesServices.showLeaderboards(

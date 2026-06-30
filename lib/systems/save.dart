@@ -173,6 +173,12 @@ class SaveSystem {
     return rank < 0 ? -1 : rank + 1;
   }
 
+  // ---- 전세계 순위 변동 추적(난이도별 마지막으로 본 순위) ----
+  /// 마지막으로 표시한 전세계 순위(없으면 0). 변동(▲▼) 계산에 사용.
+  int prevGlobalRank(int difficulty) => _p.getInt('grank_$difficulty') ?? 0;
+  Future<void> setPrevGlobalRank(int difficulty, int rank) =>
+      _p.setInt('grank_$difficulty', rank);
+
   // ---- 난이도 (0=Easy, 1=Normal, 2=Hard) ----
   int get difficulty => (_p.getInt('difficulty') ?? 1).clamp(0, 2);
   Future<void> setDifficulty(int v) => _p.setInt('difficulty', v.clamp(0, 2));

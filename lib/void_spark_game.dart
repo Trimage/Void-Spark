@@ -651,6 +651,27 @@ class VoidSparkGame extends FlameGame
     leaderboard.submit(score, save.difficulty);
   }
 
+  /// 전세계 리더보드 사용 가능 여부(로그인+설정 완료 시 true). UI 노출 판단용.
+  bool get leaderboardAvailable => leaderboard.available;
+
+  /// 게임오버 화면용: 이번 점수를 제출한 뒤 **전세계 순위 + 직전 대비 변동**을
+  /// 불러온다. 미로그인/미지원/미설정 시 null(=표시 안 함).
+  Future<GlobalRankInfo?> loadGlobalRank() async {
+    if (!leaderboard.available) return null;
+    final d = save.difficulty;
+    // 이번 판 점수를 먼저 제출(최고점이면 갱신) → 순위가 이번 기록을 반영.
+    await leaderboard.submit(score, d);
+    final rank = await leaderboard.playerGlobalRank(d);
+    if (rank == null) return null;
+    final prev = save.prevGlobalRank(d); // 0 = 첫 표시(변동 없음)
+    await save.setPrevGlobalRank(d, rank);
+    return GlobalRankInfo(
+      rank: rank,
+      prevRank: prev > 0 ? prev : null,
+      isNewBest: runPreview.newHighScore,
+    );
+  }
+
   /// 다시하기: 전체 초기화 후 재개.
   void restart() {
     children.whereType<Enemy>().forEach((e) => e.removeFromParent());
@@ -769,4 +790,25 @@ class VoidSparkGame extends FlameGame
       core.target = event.localEndPosition.clone();
     }
   }
+}
+
+/// 게임오버 화면에 표시할 전세계 순위 정보.
+class GlobalRankInfo {
+  const GlobalRankInfo({
+    required this.rank,
+    required this.prevRank,
+    required this.isNewBest,
+  });
+
+  /// 현재 전세계 순위(최고점 기준, 1부터).
+  final int rank;
+
+  /// 직전에 본 순위(없으면 null = 첫 표시).
+  final int? prevRank;
+
+  /// 이번 판이 개인 신기록인지(현재 점수 = 최고점).
+  final bool isNewBest;
+
+  /// 순위 변동(양수=상승, 음수=하락, 0=동일). prevRank 없으면 null.
+  int? get delta => prevRank == null ? null : prevRank! - rank;
 }

@@ -12,6 +12,9 @@ class _NoopLeaderboard implements LeaderboardService {
   Future<void> submit(int score, int difficulty) async {}
 
   @override
+  Future<int?> playerGlobalRank(int difficulty) async => null;
+
+  @override
   Future<void> showGlobal(int difficulty) async {}
 }
 

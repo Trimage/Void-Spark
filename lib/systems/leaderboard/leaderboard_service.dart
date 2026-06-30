@@ -10,6 +10,9 @@ abstract class LeaderboardService {
   /// 점수 제출(난이도별 리더보드로).
   Future<void> submit(int score, int difficulty);
 
+  /// 플레이어의 **전세계(global) 전체기간 순위**(최고점 기준). 미로그인/실패 시 null.
+  Future<int?> playerGlobalRank(int difficulty);
+
   /// 네이티브 리더보드 UI 표시(난이도별).
   Future<void> showGlobal(int difficulty);
 }

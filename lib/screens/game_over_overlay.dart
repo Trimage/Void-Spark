@@ -24,7 +24,26 @@ class GameOverOverlay extends StatefulWidget {
 class _GameOverOverlayState extends State<GameOverOverlay> {
   bool _busy = false;
 
+  // 전세계 순위(비동기 로드). 리더보드 미지원/미로그인 시 _rank=null.
+  GlobalRankInfo? _rank;
+  bool _rankLoading = true;
+
   VoidSparkGame get game => widget.game;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRank();
+  }
+
+  Future<void> _loadRank() async {
+    final info = await game.loadGlobalRank();
+    if (!mounted) return;
+    setState(() {
+      _rank = info;
+      _rankLoading = false;
+    });
+  }
 
   Future<void> _exit(Future<void> Function() after) async {
     if (_busy) return;
@@ -140,6 +159,11 @@ class _GameOverOverlayState extends State<GameOverOverlay> {
                 letterSpacing: 3,
               ),
             ),
+            // 전세계 순위(리더보드 사용 가능할 때만).
+            if (game.leaderboardAvailable) ...[
+              const SizedBox(height: 14),
+              _GlobalRankView(loading: _rankLoading, info: _rank),
+            ],
             const SizedBox(height: 14),
             _RunStats(game: game),
             const SizedBox(height: 14),
@@ -352,6 +376,105 @@ class _ShardRow extends StatelessWidget {
             ),
           ),
         ],
+      ],
+    );
+  }
+}
+
+/// 전세계 순위 + 직전 대비 변동 표시(리더보드 사용 가능 시).
+class _GlobalRankView extends StatelessWidget {
+  const _GlobalRankView({required this.loading, required this.info});
+
+  final bool loading;
+  final GlobalRankInfo? info;
+
+  /// 천 단위 콤마(1234 → 1,234).
+  static String _fmt(int n) {
+    final s = n.toString();
+    final b = StringBuffer();
+    for (var i = 0; i < s.length; i++) {
+      if (i > 0 && (s.length - i) % 3 == 0) b.write(',');
+      b.write(s[i]);
+    }
+    return b.toString();
+  }
+
+  Widget _badge(String text, Color color) => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.18),
+          borderRadius: BorderRadius.circular(6),
+          border: Border.all(color: color, width: 1),
+        ),
+        child: Text(text,
+            style: TextStyle(
+                color: color, fontSize: 12, fontWeight: FontWeight.w800)),
+      );
+
+  @override
+  Widget build(BuildContext context) {
+    if (loading) {
+      return Text(
+        t('전세계 순위 확인 중…', 'Checking global rank…',
+            ja: '世界ランク確認中…', zh: '正在查询全球排名…'),
+        style: const TextStyle(
+            color: Palette.textDim, fontSize: 12, letterSpacing: 1),
+      );
+    }
+    final r = info;
+    if (r == null) return const SizedBox.shrink();
+
+    final d = r.delta;
+    final Widget deltaBadge;
+    if (d == null) {
+      deltaBadge = _badge('NEW', Palette.accent);
+    } else if (d > 0) {
+      deltaBadge = _badge('▲ ${_fmt(d)}', Palette.accent);
+    } else if (d < 0) {
+      deltaBadge = _badge('▼ ${_fmt(-d)}', Palette.danger);
+    } else {
+      deltaBadge = _badge(
+          t('변동 없음', 'No change', ja: '変動なし', zh: '无变化'), Palette.textDim);
+    }
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          t('전세계 순위', 'GLOBAL RANK', ja: '世界ランク', zh: '全球排名'),
+          style: const TextStyle(
+              color: Palette.textDim, fontSize: 10, letterSpacing: 3),
+        ),
+        const SizedBox(height: 4),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              '#${_fmt(r.rank)}',
+              style: const TextStyle(
+                color: Palette.core,
+                fontSize: 24,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 1,
+                shadows: [Shadow(color: Palette.coreGlow, blurRadius: 14)],
+              ),
+            ),
+            const SizedBox(width: 10),
+            deltaBadge,
+          ],
+        ),
+        if (r.isNewBest)
+          Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: Text(
+              t('이번 점수가 최고 기록!', 'This run is your best!',
+                  ja: '今回が自己ベスト！', zh: '本局是你的最佳！'),
+              style: const TextStyle(
+                  color: Palette.accent,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700),
+            ),
+          ),
       ],
     );
   }
