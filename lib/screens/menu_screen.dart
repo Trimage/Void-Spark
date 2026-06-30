@@ -51,8 +51,6 @@ class _MenuScreenState extends State<MenuScreen> {
                 const Spacer(flex: 2),
                 _title(),
                 const Spacer(flex: 2),
-                _difficultySelector(),
-                const SizedBox(height: 16),
                 NeonButton(
                   label: 'START',
                   width: 240,
@@ -139,56 +137,6 @@ class _MenuScreenState extends State<MenuScreen> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _difficultySelector() {
-    const labels = ['EASY', 'NORMAL', 'HARD'];
-    const colors = [Palette.accent, Palette.core, Palette.danger];
-    final sel = save.difficulty;
-    return Column(
-      children: [
-        const Text('DIFFICULTY',
-            style: TextStyle(
-                color: Palette.textDim, fontSize: 10, letterSpacing: 3)),
-        const SizedBox(height: 8),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            for (var i = 0; i < 3; i++)
-              GestureDetector(
-                onTap: () async {
-                  await save.setDifficulty(i);
-                  setState(() {});
-                },
-                child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 5),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: sel == i
-                        ? colors[i].withValues(alpha: 0.18)
-                        : Colors.transparent,
-                    border: Border.all(
-                      color: sel == i ? colors[i] : Palette.textDim,
-                      width: sel == i ? 2 : 1,
-                    ),
-                  ),
-                  child: Text(
-                    labels[i],
-                    style: TextStyle(
-                      color: sel == i ? colors[i] : Palette.textDim,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 1,
-                    ),
-                  ),
-                ),
-              ),
-          ],
-        ),
-      ],
     );
   }
 

@@ -94,6 +94,10 @@ class SaveSystem {
 
   Future<void> load() async {
     _p = await SharedPreferences.getInstance();
+    // 난이도 기능 제거 — 기존에 EASY/HARD로 저장된 사용자도 NORMAL(1)로 통일.
+    if ((_p.getInt('difficulty') ?? 1) != 1) {
+      await _p.setInt('difficulty', 1);
+    }
     await _ensureDaily();
   }
 

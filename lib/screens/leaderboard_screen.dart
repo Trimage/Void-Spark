@@ -18,8 +18,8 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
   late final TextEditingController _name =
       TextEditingController(text: save.playerName);
 
-  // 보고 있는 난이도(기본: 현재 설정 난이도).
-  late int _diff = save.difficulty;
+  // 난이도 기능 제거됨 — 항상 단일(NORMAL) 보드.
+  late final int _diff = save.difficulty;
 
   @override
   void dispose() {
@@ -43,8 +43,6 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
         padding: const EdgeInsets.all(20),
         children: [
           _nameField(),
-          const SizedBox(height: 16),
-          _difficultyTabs(),
           const SizedBox(height: 16),
           if (leaderboard.available)
             Padding(
@@ -85,43 +83,6 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
           for (var i = 0; i < entries.length; i++) _row(i + 1, entries[i]),
         ],
       ),
-    );
-  }
-
-  Widget _difficultyTabs() {
-    const labels = ['EASY', 'NORMAL', 'HARD'];
-    const colors = [Palette.accent, Palette.core, Palette.danger];
-    return Row(
-      children: [
-        for (var i = 0; i < 3; i++)
-          Expanded(
-            child: GestureDetector(
-              onTap: () => setState(() => _diff = i),
-              child: Container(
-                margin: EdgeInsets.only(right: i < 2 ? 8 : 0),
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: _diff == i
-                      ? colors[i].withValues(alpha: 0.18)
-                      : Colors.transparent,
-                  border: Border.all(
-                    color: _diff == i ? colors[i] : Palette.textDim,
-                    width: _diff == i ? 2 : 1,
-                  ),
-                ),
-                child: Text(labels[i],
-                    style: TextStyle(
-                      color: _diff == i ? colors[i] : Palette.textDim,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 1,
-                    )),
-              ),
-            ),
-          ),
-      ],
     );
   }
 
