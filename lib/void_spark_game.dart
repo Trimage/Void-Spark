@@ -236,7 +236,11 @@ class VoidSparkGame extends FlameGame
 
     // 첫 플레이라면 잠시 멈춘다. 튜토리얼 오버레이는 화면 레이어에서
     // initialActiveOverlays로 띄운다(빌더가 등록된 곳에서만).
-    if (!save.tutorialSeen) pauseEngine();
+    // 보여주는 즉시 '봤음'을 디스크에 저장 — 광고 등으로 앱이 재시작돼도 재출현 방지.
+    if (!save.tutorialSeen) {
+      pauseEngine();
+      await save.setTutorialSeen();
+    }
 
     Analytics.instance.runStart(save.difficulty);
   }
@@ -267,9 +271,8 @@ class VoidSparkGame extends FlameGame
     powerups.maxBombs = maxBombs;
   }
 
-  /// 튜토리얼 닫기 — 이후 다시 보지 않도록 저장하고 게임 시작.
+  /// 튜토리얼 닫기 — 게임 시작. ('봤음' 저장은 onLoad에서 이미 완료됨)
   void dismissTutorial() {
-    save.setTutorialSeen();
     overlays.remove(tutorialOverlay);
     resumeEngine();
   }
