@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter/widgets.dart' show AppLifecycleState;
 
 import 'components/batch_layer.dart';
 import 'components/bullet.dart';
@@ -274,10 +275,36 @@ class VoidSparkGame extends FlameGame
   }
 
   // ---- 일시정지 ----
+  /// 앱 생명주기(백그라운드/잠금/복귀) 처리. Flame 기본 동작을 대체해,
+  /// 백그라운드에선 BGM·SFX·엔진을 모두 멈추고, 복귀 시엔 **플레이 중이었을 때만** 재개한다
+  /// (일시정지·게임오버 상태는 자동 재개하지 않음 — 잠금화면 소리 누수 방지).
+  @override
+  void lifecycleStateChange(AppLifecycleState appState) {
+    super.lifecycleStateChange(appState);
+    switch (appState) {
+      case AppLifecycleState.resumed:
+        if (state == GameState.playing) {
+          audio.resumeBgm();
+        } else {
+          // 일시정지·게임오버였으면 super가 엔진을 재개했더라도 다시 멈춘다.
+          pauseEngine();
+        }
+        break;
+      case AppLifecycleState.inactive:
+      case AppLifecycleState.hidden:
+      case AppLifecycleState.paused:
+      case AppLifecycleState.detached:
+        audio.pauseBgm();
+        audio.stopSfx();
+        break;
+    }
+  }
+
   void pauseGame() {
     if (state != GameState.playing) return;
     state = GameState.paused;
     audio.pauseBgm();
+    audio.stopSfx(); // 진행 중 사격음 등 즉시 중단.
     overlays.add(pauseOverlay);
     pauseEngine();
   }
@@ -586,6 +613,7 @@ class VoidSparkGame extends FlameGame
     state = GameState.gameOver;
     Analytics.instance.runEnd(score, sector, waves.waveNumber);
     audio.pauseBgm();
+    audio.stopSfx(); // 사망 즉시 사격음 등 진행 중 효과음 중단.
     pauseEngine();
     // 확정 기록은 부활/파편2배 광고 기회를 준 뒤(RETRY/MENU 시) 수행한다.
     overlays.add(gameOverOverlay);

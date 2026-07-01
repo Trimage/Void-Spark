@@ -21,6 +21,9 @@ class AudioSystem {
   AudioPool? _killPool;
   AudioPool? _collectPool;
 
+  // 재생 중인 풀 효과음의 정지 함수들 — 게임오버/일시정지/백그라운드 시 즉시 끊기 위함.
+  final List<Future<void> Function()> _activeStops = [];
+
   // 사운드별 마지막 재생 시각(ms) — 쓰로틀용.
   final Map<String, int> _lastMs = {};
 
@@ -69,21 +72,26 @@ class AudioSystem {
   }
 
   // ---- SFX ----
-  void shoot() {
-    if (!enabled || !_ready) return;
-    if (!_allow('shoot', 70)) return; // 초당 ~14회로 제한
-    try {
-      _shootPool?.start(volume: 0.18 * sfxVolume);
-    } catch (_) {}
-  }
+  void shoot() => _playPooled(_shootPool, 'shoot', 0.18, 70); // 초당 ~14회로 제한
 
   /// 풀에서 플레이어를 재사용해 재생(네이티브 플레이어 생성 churn 제거).
+  /// 재생 정지 함수를 보관해 게임오버/일시정지/백그라운드 시 즉시 끊을 수 있게 한다.
   void _playPooled(AudioPool? pool, String key, double volume, int minGapMs) {
     if (!enabled || !_ready || pool == null) return;
     if (!_allow(key, minGapMs)) return;
-    try {
-      pool.start(volume: volume * sfxVolume);
-    } catch (_) {}
+    pool.start(volume: volume * sfxVolume).then((stop) {
+      _activeStops.add(stop);
+      if (_activeStops.length > 16) _activeStops.removeAt(0);
+    }).catchError((_) {});
+  }
+
+  /// 재생 중인 모든 풀 효과음을 즉시 멈춘다(사격음 누수·백그라운드 소리 방지).
+  void stopSfx() {
+    final stops = List.of(_activeStops);
+    _activeStops.clear();
+    for (final stop in stops) {
+      stop().catchError((_) {});
+    }
   }
 
   void kill() => _playPooled(_killPool, 'kill', 0.5, 45);
