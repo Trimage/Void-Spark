@@ -24,37 +24,37 @@ class Upgrades {
       {'ko': '연사 강화', 'en': 'Rapid Fire', 'ja': '連射強化', 'zh': '连射强化'},
       {'ko': '사격 속도 증가', 'en': 'Increase fire rate', 'ja': '射撃速度アップ', 'zh': '提升射速'},
       'bolt',
-      [100, 220, 420]);
+      [160, 360, 680]);
   static const moveSpeed = UpgradeDef(
       'up_speed',
       {'ko': '기동 강화', 'en': 'Mobility', 'ja': '機動強化', 'zh': '机动强化'},
       {'ko': '코어 이동 속도 증가', 'en': 'Faster core movement', 'ja': 'コア移動が速く', 'zh': '核心移动更快'},
       'speed',
-      [100, 220, 420]);
+      [160, 360, 680]);
   static const bombSlot = UpgradeDef(
       'up_bomb',
       {'ko': '폭탄 증설', 'en': 'Bomb Slot', 'ja': 'ボム増設', 'zh': '炸弹槽位'},
       {'ko': '폭탄 최대 비축 +1', 'en': '+1 max bomb', 'ja': 'ボム最大+1', 'zh': '炸弹上限+1'},
       'bomb',
-      [280, 600]);
+      [440, 940]);
   static const magnet = UpgradeDef(
       'up_magnet',
       {'ko': '자력 강화', 'en': 'Magnetism', 'ja': '磁力強化', 'zh': '磁力强化'},
       {'ko': '오브 흡입 범위 증가', 'en': 'Larger orb pickup', 'ja': 'オーブ吸引範囲アップ', 'zh': '拾取范围增大'},
       'magnet',
-      [80, 180, 340]);
+      [130, 290, 540]);
   static const xpBoost = UpgradeDef(
       'up_xp',
       {'ko': '성장 가속', 'en': 'Growth', 'ja': '成長加速', 'zh': '成长加速'},
       {'ko': '레벨업 XP +15%', 'en': '+15% XP per level', 'ja': 'レベルXP +15%', 'zh': '升级经验 +15%'},
       'xp',
-      [140, 320]);
+      [220, 500]);
   static const luck = UpgradeDef(
       'up_luck',
       {'ko': '행운', 'en': 'Fortune', 'ja': '幸運', 'zh': '幸运'},
       {'ko': '파워업 드롭률 증가', 'en': 'Higher drop rate', 'ja': 'パワーアップ出現率増', 'zh': '提升道具掉率'},
       'luck',
-      [120, 280]);
+      [190, 440]);
 
   static const all = [fireRate, moveSpeed, bombSlot, magnet, xpBoost, luck];
 }

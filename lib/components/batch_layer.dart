@@ -45,6 +45,18 @@ class BatchLayer extends PositionComponent
       _glowDot(canvas, o.position.x, o.position.y, GameConfig.orbRadius,
           Palette.scoreOrb, Palette.scoreOrbGlow);
     }
+
+    // 파티클(수명에 따라 페이드/축소).
+    for (final p in g.pPool) {
+      if (!p.active) continue;
+      final t = p.fadeT;
+      final r = 3.0 * t + 0.5;
+      final center = Offset(p.position.x, p.position.y);
+      _p.color = Neon.alpha(p.color, t * 0.35);
+      canvas.drawCircle(center, r * 2.2, _p);
+      _p.color = Neon.alpha(p.color, t);
+      canvas.drawCircle(center, r, _p);
+    }
   }
 
   /// 저비용 글로우(반투명 큰 원 1겹 + 본체) — blur 없음.

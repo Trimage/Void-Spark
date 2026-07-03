@@ -13,10 +13,10 @@ import 'enemy.dart';
 /// 3페이즈로 탄막이 강해진다. 등장할 때마다 [variant]가 바뀌어(0=Monolith,
 /// 1=Vortex) 패턴 세트와 외형이 달라진다.
 class Boss extends Enemy {
-  Boss({required super.position, this.variant = 0})
+  Boss({required super.position, this.variant = 0, int hpBonus = 0})
       : super(
           radius: GameConfig.bossRadius,
-          maxHp: GameConfig.bossHp,
+          maxHp: GameConfig.bossHp + hpBonus,
         );
 
   /// 보스 변형(0=Monolith, 1=Vortex).

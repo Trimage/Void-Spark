@@ -145,6 +145,7 @@ class VoidSparkGame extends FlameGame
   List<EnemyBullet> get ebPool => _ebPool;
   List<Bullet> get pbPool => _pbPool;
   List<ScoreOrb> get orbPool => _orbPool;
+  List<NeonParticle> get pPool => _pPool;
 
   /// 프레임마다 갱신되는 활성 적 목록(플레이어 총알 명중 판정용).
   final List<Enemy> activeEnemies = [];
@@ -253,8 +254,12 @@ class VoidSparkGame extends FlameGame
   }
 
   /// 파워업 드롭 확률(행운 업그레이드 반영).
-  double get powerupDropChance =>
-      GameConfig.powerupDropChance + 0.03 * save.upgradeLevel('up_luck');
+  double get powerupDropChance {
+    final base = GameConfig.powerupDropChance + 0.03 * save.upgradeLevel('up_luck');
+    // 생존이 길수록(강도 상승) 아이템 드롭을 줄인다 — 최소 35%까지 감소.
+    final decay = (1 - 0.28 * intensity.difficulty).clamp(0.35, 1.0);
+    return base * decay;
+  }
 
   /// 저장된 설정 적용(사운드/햅틱/드래그 모드/볼륨). aim은 코어가 실시간 참조.
   void _applySettings() {
@@ -288,6 +293,10 @@ class VoidSparkGame extends FlameGame
       case AppLifecycleState.resumed:
         if (state == GameState.playing) {
           audio.resumeBgm();
+          resumeEngine(); // 엔진 확실히 재개(복귀 후 조작 멈춤 방지).
+          // 백그라운드 중 끊긴 드래그가 남아 조작이 먹통 되는 것을 방지 —
+          // 목표를 현재 위치로 리셋해 다음 입력부터 정상 반응.
+          core.target = core.position.clone();
         } else {
           // 일시정지·게임오버였으면 super가 엔진을 재개했더라도 다시 멈춘다.
           pauseEngine();
@@ -366,6 +375,7 @@ class VoidSparkGame extends FlameGame
     final b = Boss(
       position: Vector2(size.x / 2, -GameConfig.bossRadius),
       variant: _bossCount % 2, // 등장마다 Monolith ↔ Vortex 교대.
+      hpBonus: _bossCount * GameConfig.bossHpPerSpawn, // 뒤 보스일수록 단단.
     );
     _bossCount++;
     boss = b;
@@ -387,14 +397,9 @@ class VoidSparkGame extends FlameGame
     bossKillsThisRun++;
     boss = null;
     bossActive = false;
-    // 엔딩 도달 — 목표 보스 수 달성 시 1회 승리 연출.
+    // 엔딩/승리 프롬프트 없음 — 게임은 계속 이어진다(엔드리스).
     Analytics.instance.bossKill(sector);
-    if (!victoryReached && bossKillsThisRun >= GameConfig.victoryBossCount) {
-      victoryReached = true;
-      Analytics.instance.victory(score);
-      _showVictory();
-    }
-    spawnBurst(b.position, Palette.danger, count: 48, speedScale: 1.6);
+    spawnBurst(b.position, Palette.danger, count: 28, speedScale: 1.6);
     audio.kill();
     haptics.boss();
     juice.shake(GameConfig.shakeBig);
@@ -434,6 +439,7 @@ class VoidSparkGame extends FlameGame
     _xpNext = (_xpNext * GameConfig.xpGrowth).round();
     levelChoices = _rollChoices();
     pauseEngine();
+    audio.stopSfx(); // 선택 중 남은 사격음 등 즉시 중단.
     overlays.add(levelUpOverlay);
   }
 
@@ -648,14 +654,6 @@ class VoidSparkGame extends FlameGame
     overlays.remove(gameOverOverlay);
     audio.resumeBgm();
     resumeEngine();
-  }
-
-  /// 엔딩(빛의 귀환) 도달 연출 — 잠시 멈추고 승리 오버레이를 띄운다.
-  void _showVictory() {
-    audio.pauseBgm();
-    pauseEngine();
-    overlays.add(victoryOverlay);
-    juice.shake(GameConfig.shakeBig);
   }
 
   /// 승리 후 계속(무한 모드로 이어가기).

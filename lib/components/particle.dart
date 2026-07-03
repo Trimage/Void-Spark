@@ -1,12 +1,10 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
-import 'neon.dart';
-
 /// 단순 발광 파티클 — 한 점에서 방사형으로 흩어지며 사라진다.
 ///
-/// 성능: 폭발마다 대량 생성되므로 **오브젝트 풀**로 재사용한다.
-/// 비활성([active]=false) 시 update/render를 건너뛴다.
+/// 성능: 폭발마다 대량 생성되므로 **오브젝트 풀**로 재사용하고, 렌더는
+/// BatchLayer가 일괄 처리한다(개별 컴포넌트 변환 오버헤드 제거).
 class NeonParticle extends PositionComponent {
   NeonParticle() : super(anchor: Anchor.center, priority: 8);
 
@@ -16,6 +14,9 @@ class NeonParticle extends PositionComponent {
   double _age = 0;
   bool active = false;
 
+  /// 남은 수명 비율(1=갓 생성, 0=소멸). BatchLayer의 페이드·크기 계산용.
+  double get fadeT => (1 - _age / life).clamp(0.0, 1.0);
+
   void spawn(Vector2 pos, Vector2 vel, Color c, double l) {
     position.setFrom(pos);
     velocity.setFrom(vel);
@@ -24,8 +25,6 @@ class NeonParticle extends PositionComponent {
     _age = 0;
     active = true;
   }
-
-  static final Paint _p = Paint();
 
   @override
   void update(double dt) {
@@ -41,14 +40,7 @@ class NeonParticle extends PositionComponent {
     position.y += velocity.y * dt;
   }
 
+  // 렌더는 BatchLayer가 일괄 처리 — renderTree를 건너뛰어 변환 비용 제거.
   @override
-  void render(Canvas canvas) {
-    if (!active) return;
-    final t = (1 - _age / life).clamp(0.0, 1.0);
-    final r = 3.0 * t + 0.5;
-    _p.color = Neon.alpha(color, t * 0.35);
-    canvas.drawCircle(Offset.zero, r * 2.2, _p);
-    _p.color = Neon.alpha(color, t);
-    canvas.drawCircle(Offset.zero, r, _p);
-  }
+  void renderTree(Canvas canvas) {}
 }

@@ -43,9 +43,10 @@ class AudioSystem {
   Future<void> preload() async {
     try {
       await FlameAudio.audioCache.loadAll(_files);
-      _shootPool = await FlameAudio.createPool('shoot.wav', maxPlayers: 4);
-      _killPool = await FlameAudio.createPool('kill.wav', maxPlayers: 4);
-      _collectPool = await FlameAudio.createPool('collect.wav', maxPlayers: 4);
+      // 격렬한 구간에 효과음이 끊기지 않도록 풀 플레이어 수를 넉넉히.
+      _shootPool = await FlameAudio.createPool('shoot.wav', maxPlayers: 8);
+      _killPool = await FlameAudio.createPool('kill.wav', maxPlayers: 8);
+      _collectPool = await FlameAudio.createPool('collect.wav', maxPlayers: 8);
       _ready = true;
     } catch (e) {
       debugPrint('AudioSystem preload skipped: $e');

@@ -101,16 +101,16 @@ class GameConfig {
 
   // ---- Intensity 시스템 (생존 시간이 길수록 무한히 상승) ----
   /// 강도가 0→1(최대치 근접)에 도달하기까지 걸리는 시간(초).
-  static const double intensityRampSeconds = 90.0;
+  static const double intensityRampSeconds = 75.0;
 
   /// 강도 1 도달 후, 생존 시간에 비례해 추가로 빨라지는 정도(클수록 가파름).
-  static const double overdriveSpawnGain = 0.9;
+  static const double overdriveSpawnGain = 1.15;
 
   /// 오버드라이브 구간에서 적/탄 이동·발사가 빨라지는 배율 상한.
-  static const double enemySpeedMaxMul = 2.7;
+  static const double enemySpeedMaxMul = 3.4;
 
   /// 오버드라이브 1당 적 속도 증가율.
-  static const double overdriveSpeedGain = 0.24;
+  static const double overdriveSpeedGain = 0.32;
 
   // ---- Wave 시스템 ----
   /// 한 웨이브의 지속 시간(초). 이 시간마다 다음 웨이브로 전환.
@@ -260,7 +260,9 @@ class GameConfig {
   static const int bossEveryWaves = 4;
 
   static const double bossRadius = 56.0;
-  static const int bossHp = 200;
+  static const int bossHp = 260;
+  /// 등장하는 보스마다 추가되는 체력(뒤로 갈수록 더 단단함).
+  static const int bossHpPerSpawn = 80;
   static const double bossSpeed = 70.0;
 
   /// 보스 진입 후 좌우 순항 시 화면 위쪽에 유지하는 y 위치.
@@ -295,13 +297,13 @@ class GameConfig {
   static const int shardDivisor = 40;
 
   /// 시작 실드 보너스 해금 가격(파편).
-  static const int startShieldPrice = 150;
+  static const int startShieldPrice = 240;
 
   /// 시작 폭탄 보너스 해금 가격(파편).
-  static const int startBombPrice = 200;
+  static const int startBombPrice = 320;
 
   /// 시작 콤보 보너스 — 해금 가격(파편)과 시작 콤보 수치.
-  static const int startComboPrice = 250;
+  static const int startComboPrice = 400;
   static const int startComboCount = 10;
 
   /// 일일 도전 완료 보상(파편).
