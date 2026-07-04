@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flame/events.dart';
@@ -229,11 +230,12 @@ class VoidSparkGame extends FlameGame
     _applyStartBonus();
     _applySettings();
 
-    await audio.preload();
-    await haptics.init();
-    await ads.init();
-
-    audio.startBgm();
+    // 플러그인 초기화(오디오/햅틱/광고)는 게임 로드를 **막지 않도록** 백그라운드로
+    // 실행한다. iOS에서 광고(AdMob) SDK 초기화가 멈추면(hang) onLoad가 끝나지 않아
+    // '회색 화면'으로 정지하던 문제를 방지 — 게임은 즉시 시작되고, 준비되는 대로 반영.
+    unawaited(audio.preload().then((_) => audio.startBgm()));
+    unawaited(haptics.init());
+    unawaited(ads.init());
 
     // 첫 플레이라면 잠시 멈춘다. 튜토리얼 오버레이는 화면 레이어에서
     // initialActiveOverlays로 띄운다(빌더가 등록된 곳에서만).
