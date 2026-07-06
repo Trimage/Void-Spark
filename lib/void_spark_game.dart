@@ -53,7 +53,8 @@ class VoidSparkGame extends FlameGame
   static const String victoryOverlay = 'victory';
   static const String levelUpOverlay = 'levelUp';
 
-  late final Core core;
+  // 선언 시점에 생성 — 라이프사이클/렌더가 onLoad 완료 전에 접근해도 안전(미초기화 방지).
+  final Core core = Core();
   late final CoreTrail _coreTrail;
   late final Spawner _spawner;
   late final Hud _hud;
@@ -203,7 +204,6 @@ class VoidSparkGame extends FlameGame
     powerups = PowerupSystem();
     await addAll([intensity, waves, combo, powerups]);
 
-    core = Core();
     await add(core);
     _coreTrail = CoreTrail();
     await add(_coreTrail);
@@ -291,6 +291,9 @@ class VoidSparkGame extends FlameGame
   @override
   void lifecycleStateChange(AppLifecycleState appState) {
     super.lifecycleStateChange(appState);
+    // 로드 완료 전 라이프사이클 이벤트에서 아직 없는 컴포넌트(core 등)를 만지면
+    // 크래시(회색 화면)가 난다 — 로드 후에만 처리.
+    if (!isLoaded) return;
     switch (appState) {
       case AppLifecycleState.resumed:
         if (state == GameState.playing) {
