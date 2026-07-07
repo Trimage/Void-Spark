@@ -27,12 +27,12 @@ class Skins {
   static const List<CoreSkin> all = [
     // 파편으로 해금되는 스킨.
     CoreSkin('SPARK', Color(0xFF7DF9FF), Color(0xFF21E6FF), 0),
-    CoreSkin('EMBER', Color(0xFFFFB45C), Color(0xFFFF6B2E), 200),
-    CoreSkin('TOXIC', Color(0xFFC6FF4D), Color(0xFF8BFF00), 340),
-    CoreSkin('NOVA', Color(0xFFFF6FD8), Color(0xFFFF2EC4), 500),
-    CoreSkin('PULSE', Color(0xFF6EE7FF), Color(0xFF00B4FF), 640),
-    CoreSkin('FROST', Color(0xFFD6FBFF), Color(0xFF8AD8FF), 780),
-    CoreSkin('AURUM', Color(0xFFFFE36E), Color(0xFFFFC400), 980),
+    CoreSkin('EMBER', Color(0xFFFFB45C), Color(0xFFFF6B2E), 300),
+    CoreSkin('TOXIC', Color(0xFFC6FF4D), Color(0xFF8BFF00), 500),
+    CoreSkin('NOVA', Color(0xFFFF6FD8), Color(0xFFFF2EC4), 720),
+    CoreSkin('PULSE', Color(0xFF6EE7FF), Color(0xFF00B4FF), 920),
+    CoreSkin('FROST', Color(0xFFD6FBFF), Color(0xFF8AD8FF), 1150),
+    CoreSkin('AURUM', Color(0xFFFFE36E), Color(0xFFFFC400), 1500),
     // 프리미엄 팩 1 (IAP: premium_skins).
     CoreSkin('PRISM', Color(0xFFB6FFF7), Color(0xFF00FFD0), 0,
         packId: 'premium_skins'),

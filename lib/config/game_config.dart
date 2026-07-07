@@ -294,20 +294,20 @@ class GameConfig {
 
   // ---- 메타 진행 ----
   /// 파편(Shard) 환산: 점수 ÷ 이 값 = 획득 파편. (낮을수록 더 많이 획득)
-  static const int shardDivisor = 40;
+  static const int shardDivisor = 65;
 
   /// 시작 실드 보너스 해금 가격(파편).
-  static const int startShieldPrice = 240;
+  static const int startShieldPrice = 340;
 
   /// 시작 폭탄 보너스 해금 가격(파편).
-  static const int startBombPrice = 320;
+  static const int startBombPrice = 460;
 
   /// 시작 콤보 보너스 — 해금 가격(파편)과 시작 콤보 수치.
-  static const int startComboPrice = 400;
+  static const int startComboPrice = 580;
   static const int startComboCount = 10;
 
   /// 일일 도전 완료 보상(파편).
-  static const int dailyReward = 150;
+  static const int dailyReward = 110;
 
   // ---- 리더보드 (글로벌 순위, 난이도별) ----
   /// !!! Play Console / App Store Connect에 난이도별로 3개씩 등록 후 교체.
