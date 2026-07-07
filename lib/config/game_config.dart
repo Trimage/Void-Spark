@@ -50,7 +50,7 @@ class GameConfig {
   static const double turretRadius = 18.0;
   static const double turretSpeed = 45.0;
   static const int turretHp = 4;
-  static const double turretFireInterval = 1.6;
+  static const double turretFireInterval = 1.15; // 조준탄(피하기 어려운 탄)을 더 자주.
   static const double turretBulletSpeed = 220.0;
 
   // ---- 적: Spinner (원형/나선 탄막) ----
@@ -87,27 +87,27 @@ class GameConfig {
 
   // ---- 적 탄막 ----
   static const double enemyBulletRadius = 6.0;
-  static const double enemyBulletSpeed = 252.0;
+  static const double enemyBulletSpeed = 268.0;
 
   // ---- 스폰 / 난이도 ----
   /// 초기(intensity 0) 스폰 간격(초).
-  static const double baseSpawnInterval = 1.05;
+  static const double baseSpawnInterval = 0.95;
 
   /// 최대 강도에서의 스폰 간격(초) — 가장 빡센 상태.
-  static const double minSpawnInterval = 0.25;
+  static const double minSpawnInterval = 0.22;
 
   /// 오버드라이브(강도 1 초과)에서도 스폰 간격이 더 줄어드는 절대 하한(초).
   static const double absoluteMinSpawnInterval = 0.16;
 
   // ---- Intensity 시스템 (생존 시간이 길수록 무한히 상승) ----
   /// 강도가 0→1(최대치 근접)에 도달하기까지 걸리는 시간(초).
-  static const double intensityRampSeconds = 75.0;
+  static const double intensityRampSeconds = 62.0;
 
   /// 강도 1 도달 후, 생존 시간에 비례해 추가로 빨라지는 정도(클수록 가파름).
-  static const double overdriveSpawnGain = 1.15;
+  static const double overdriveSpawnGain = 1.35;
 
   /// 오버드라이브 구간에서 적/탄 이동·발사가 빨라지는 배율 상한.
-  static const double enemySpeedMaxMul = 3.4;
+  static const double enemySpeedMaxMul = 3.9;
 
   /// 오버드라이브 1당 적 속도 증가율.
   static const double overdriveSpeedGain = 0.32;
@@ -157,7 +157,7 @@ class GameConfig {
 
   // ---- 파워업 ----
   /// 적 처치 시 파워업이 드롭될 확률.
-  static const double powerupDropChance = 0.07;
+  static const double powerupDropChance = 0.055;
 
   /// 파워업 픽업 반지름.
   static const double powerupRadius = 13.0;
@@ -206,7 +206,7 @@ class GameConfig {
   static const int maxEnemies = 48;
 
   /// 동시에 존재 가능한 파티클 수(초과분은 생성하지 않음).
-  static const int maxParticles = 110;
+  static const int maxParticles = 90;
 
   /// 동시에 존재 가능한 점수 오브 수(초과 시 가장 오래된 것부터 정리).
   static const int maxOrbs = 45;

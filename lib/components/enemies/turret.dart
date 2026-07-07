@@ -43,6 +43,7 @@ class Turret extends Enemy {
     game.spawnEnemyBullet(
       position.clone(),
       dir.normalized() * GameConfig.turretBulletSpeed,
+      aimed: true, // 코어 조준탄 — 붉은 경고색.
     );
   }
 

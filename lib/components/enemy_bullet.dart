@@ -17,11 +17,15 @@ class EnemyBullet extends PositionComponent with HasGameReference<VoidSparkGame>
   bool active = false;
   bool _grazed = false;
 
+  /// 코어를 조준한 '피하기 어려운' 탄 여부(다른 색으로 렌더).
+  bool aimed = false;
+
   /// 풀에서 꺼내 재사용.
-  void spawn(Vector2 pos, Vector2 vel) {
+  void spawn(Vector2 pos, Vector2 vel, {bool aimed = false}) {
     position.setFrom(pos);
     velocity.setFrom(vel);
     _grazed = false;
+    this.aimed = aimed;
     active = true;
   }
 

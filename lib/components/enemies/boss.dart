@@ -153,7 +153,8 @@ class Boss extends Enemy {
       final a = base + (i - (count - 1) / 2) * spread;
       final dir = Vector2(math.cos(a), math.sin(a));
       game.spawnEnemyBullet(
-          position.clone(), dir * GameConfig.turretBulletSpeed);
+          position.clone(), dir * GameConfig.turretBulletSpeed,
+          aimed: true); // 코어 조준탄 — 붉은 경고색.
     }
   }
 

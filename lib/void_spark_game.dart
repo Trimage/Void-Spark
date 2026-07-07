@@ -258,8 +258,8 @@ class VoidSparkGame extends FlameGame
   /// 파워업 드롭 확률(행운 업그레이드 반영).
   double get powerupDropChance {
     final base = GameConfig.powerupDropChance + 0.03 * save.upgradeLevel('up_luck');
-    // 생존이 길수록(강도 상승) 아이템 드롭을 줄인다 — 최소 35%까지 감소.
-    final decay = (1 - 0.28 * intensity.difficulty).clamp(0.35, 1.0);
+    // 생존이 길수록(강도 상승) 아이템 드롭을 크게 줄인다 — 최소 20%까지 감소.
+    final decay = (1 - 0.42 * intensity.difficulty).clamp(0.20, 1.0);
     return base * decay;
   }
 
@@ -537,12 +537,12 @@ class VoidSparkGame extends FlameGame
     juice.edgeFlash();
   }
 
-  void spawnEnemyBullet(Vector2 position, Vector2 velocity) {
+  void spawnEnemyBullet(Vector2 position, Vector2 velocity, {bool aimed = false}) {
     if (state != GameState.playing) return;
     // 풀에서 비활성 탄을 찾아 재사용(없으면 상한 도달 → 무시).
     for (final b in _ebPool) {
       if (!b.active) {
-        b.spawn(position, velocity);
+        b.spawn(position, velocity, aimed: aimed);
         return;
       }
     }

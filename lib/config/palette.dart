@@ -30,6 +30,10 @@ class Palette {
   // 위험 / 피격 플래시
   static const Color danger = Color(0xFFFF1744);
 
+  // 조준탄(코어를 노리는 피하기 어려운 탄) — 일반 탄막(분홍)과 구분되는 붉은 경고색.
+  static const Color aimedBullet = Color(0xFFFF3B3B);
+  static const Color aimedBulletGlow = Color(0xFFFF1744);
+
   // UI 텍스트
   static const Color textHi = Color(0xFFEAF6FF);
   static const Color textDim = Color(0xFF6E7BA8);
