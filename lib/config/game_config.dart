@@ -297,13 +297,13 @@ class GameConfig {
   static const int shardDivisor = 65;
 
   /// 시작 실드 보너스 해금 가격(파편).
-  static const int startShieldPrice = 340;
+  static const int startShieldPrice = 460;
 
   /// 시작 폭탄 보너스 해금 가격(파편).
-  static const int startBombPrice = 460;
+  static const int startBombPrice = 620;
 
   /// 시작 콤보 보너스 — 해금 가격(파편)과 시작 콤보 수치.
-  static const int startComboPrice = 580;
+  static const int startComboPrice = 780;
   static const int startComboCount = 10;
 
   /// 일일 도전 완료 보상(파편).

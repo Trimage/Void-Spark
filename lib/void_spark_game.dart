@@ -483,6 +483,11 @@ class VoidSparkGame extends FlameGame
   }
 
   void _spawnOrb(Vector2 position) {
+    // 화면 밖(특히 위쪽)에서 적이 죽어도 오브가 화면 안에 떨어져 주울 수 있도록
+    // 생성 위치를 플레이 영역 안으로 보정한다(경험치·점수 손실 방지).
+    const m = 22.0;
+    position.x = position.x.clamp(m, size.x - m);
+    position.y = position.y.clamp(m, size.y - m);
     // 풀에서 비활성 오브를 재사용. 가득 차면 가장 오래된 것을 교체.
     ScoreOrb? oldest;
     for (final o in _orbPool) {
