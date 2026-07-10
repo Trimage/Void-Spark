@@ -200,20 +200,20 @@ class GameConfig {
 
   // ---- 성능 상한(동시 존재 가능한 최대 수) ----
   /// 화면에 동시에 존재 가능한 적 탄막 수(초과 시 신규 발사 무시).
-  static const int maxEnemyBullets = 200;
+  static const int maxEnemyBullets = 160;
 
   /// 동시에 존재 가능한 일반 적 수(보스 제외, 초과 시 스폰 보류).
-  static const int maxEnemies = 48;
+  static const int maxEnemies = 40;
 
   /// 동시에 존재 가능한 파티클 수(초과분은 생성하지 않음).
-  static const int maxParticles = 90;
+  static const int maxParticles = 70;
 
   /// 동시에 존재 가능한 점수 오브 수(초과 시 가장 오래된 것부터 정리).
   static const int maxOrbs = 45;
 
   /// 동시에 존재 가능한 플레이어 총알 수(확산·후방·연사 누적 폭증 방지).
   /// 난사 시 충돌·렌더 피크 부하를 줄이려 상한을 낮춤(110).
-  static const int maxPlayerBullets = 110;
+  static const int maxPlayerBullets = 90;
 
   /// 한 번 발사 시 한쪽 추가 탄(쌍)의 상한(확산 무한 누적 방지).
   static const int maxSidePairs = 5;
@@ -274,7 +274,7 @@ class GameConfig {
   static const double bossFireP3 = 0.7;
 
   /// 보스 링 탄막 1회 탄 수.
-  static const int bossRingBullets = 18;
+  static const int bossRingBullets = 14;
 
   /// 보스 처치 보너스 점수.
   static const int bossScore = 500;

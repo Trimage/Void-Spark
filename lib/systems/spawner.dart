@@ -26,7 +26,8 @@ class Spawner extends Component with HasGameReference<VoidSparkGame> {
     _timer += dt;
     final interval = game.intensity.spawnInterval *
         game.waves.current.spawnMultiplier *
-        game.difficultySpawnMul;
+        game.difficultySpawnMul *
+        game.sectorEaseSpawn;
     if (_timer >= interval) {
       _timer -= interval;
       _spawnFromWave();

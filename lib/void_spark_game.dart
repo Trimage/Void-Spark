@@ -186,10 +186,15 @@ class VoidSparkGame extends FlameGame
   double get difficultySpawnMul => const [1.15, 0.9, 0.72][save.difficulty];
   double get difficultySpeedMul => const [0.95, 1.12, 1.3][save.difficulty];
 
+  /// 섹터 기반 완화 — 첫 보스 전(sector 1)은 완만하게, 보스를 잡고 sector 2로
+  /// 넘어가면 풀 난이도. (초반을 살짝 낮추고, '보스 후 급상승'을 sector 2부터로)
+  double get sectorEaseSpawn => sector >= 2 ? 1.0 : 1.22; // sector1 스폰 22% 느림
+  double get sectorEaseSpeed => sector >= 2 ? 1.0 : 0.86; // sector1 적속도 14% 느림
+
   /// 적/탄에 적용되는 시간 배율 — Slow면 느려지고, 오버드라이브·난이도로 빨라진다.
   double get enemyTimeScale => powerups.slowActive
       ? GameConfig.slowTimeScale
-      : intensity.enemySpeedMul * difficultySpeedMul;
+      : intensity.enemySpeedMul * difficultySpeedMul * sectorEaseSpeed;
 
   @override
   Color backgroundColor() => Palette.voidDeep;
