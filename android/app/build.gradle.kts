@@ -17,7 +17,9 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace = "com.kaammo.voidspark"
-    compileSdk = flutter.compileSdkVersion
+    // Google Play 정책: 최신 Android 출시로부터 1년 이내 API 타겟 필수.
+    // Android 16(API 36) 타겟. (Flutter 3.29 기본은 35라 직접 고정)
+    compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -36,7 +38,7 @@ android {
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         // google_mobile_ads(AdMob)가 minSdk 23 이상을 요구.
         minSdk = maxOf(23, flutter.minSdkVersion)
-        targetSdk = flutter.targetSdkVersion
+        targetSdk = 36
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
